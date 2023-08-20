@@ -8,7 +8,7 @@ interface CSGOInspectorConfig {
     requestDelay?: number;
     httpProxies?: string[];
 }
-export default class CSGOInspector {
+export class CSGOInspector {
     databaseAdapter: BaseAdapter;
     queue: Queue;
     gameData: GameData;
