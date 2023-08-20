@@ -1,0 +1,7 @@
+[
+    {
+        "accountName": "username",
+        "password": "password",
+        "sharedSecret": "sharedSecret"
+    }
+]
