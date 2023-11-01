@@ -79,6 +79,12 @@ export class Bot extends EventEmitter {
         this.csgoClient.on('inspectItemInfo', this.onInspectItemInfo.bind(this));
         this.csgoClient.on('debug', this.onDebug.bind(this));
 
+        this.steamClient.on("steamGuard", (domain, callback, lastCodeWrong) => {
+            if(lastCodeWrong) {
+                console.log("Last code wrong, try again!");
+            }	
+            setTimeout(() => callback(SteamTotp.generateAuthCode(this.steamBotConfig.sharedSecret)), 15000);	
+        });
     }
 
     login() {

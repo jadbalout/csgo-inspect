@@ -89,6 +89,7 @@ export class Queue extends EventEmitter {
             if(worker.state !== BotState.Ready) continue;
             const job = this.jobs.shift();
             if(job) {
+                if(job.state !== JobState.Created) continue;
                 job.state = JobState.Pending;
                 worker.inspectItem(job.inspectLink).then((item: CSGOItem) => {
                     job.data = item;

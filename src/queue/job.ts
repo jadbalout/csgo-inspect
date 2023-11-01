@@ -27,7 +27,7 @@ export class Job extends EventEmitter {
             if(this.state == JobState.Created) {
                 this.fail('Job timed out.');
             }
-        }, 30000);
+        }, 20000);
     }
 
     fail(err: any) {
