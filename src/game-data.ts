@@ -3,6 +3,7 @@ import https from 'https';
 import * as vdf from 'simple-vdf';
 import getFloatKey from './util/getFloatKey';
 import { CSGOItem } from './bot';
+import getPhaseByPaintIndex from './util/getPhaseByPaintIndex';
 
 export interface GameItemSticker {
     codename: string;
@@ -22,6 +23,7 @@ export type ExpandedCSGOItem = CSGOItem & {
     originname: string;
     wearname: string;
     fullitemname: string;
+    phasename: string;
 }
 
 export class GameData {
@@ -35,9 +37,9 @@ export class GameData {
     itemsGameCDN: Record<string, any>;
     constructor() {
         //Heavily inspired by csfloat
-        this.items_game_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/master/csgo/scripts/items/items_game.txt';
+        this.items_game_url = 'https://raw.githubusercontent.com/Citrinate/CS2-ItemFileTracking/main/items_game.txt';
         this.items_game_cdn_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/master/csgo/scripts/items/items_game_cdn.txt';
-        this.csgo_english_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/master/csgo/resource/csgo_english.txt';
+        this.csgo_english_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/master/game/csgo/resource/csgo_english.txt';
         this.schema_url = 'https://raw.githubusercontent.com/SteamDatabase/SteamTracking/b5cba7a22ab899d6d423380cff21cec707b7c947/ItemSchema/CounterStrikeGlobalOffensive.json';
         
         if (!fs.existsSync('./game_files')) {
@@ -223,6 +225,7 @@ export class GameData {
             return parseInt(this.itemsGame['qualities'][key]['value']) === expandedItem.quality;
         });
 
+        expandedItem.phasename = getPhaseByPaintIndex(expandedItem.paintindex);
         expandedItem.qualityname = this.csgoGameUIEnglish[qualityKey];
 
         // Get the origin name
@@ -255,7 +258,7 @@ export class GameData {
 
         name += `${expandedItem.weapontype} `;
 
-        if (expandedItem.weapontype === 'Sticker' || expandedItem.weapontype === 'Sealed Graffiti') {
+        if (expandedItem.weapontype === 'Sticker' || expandedItem.weapontype === 'Sealed Graffiti' || expandedItem.weapontype === 'Graffiti') {
             name += `| ${expandedItem.stickers[0].name}`;
         }
 
@@ -263,7 +266,9 @@ export class GameData {
         if (expandedItem.itemname && expandedItem.itemname !== '-') {
             name += `| ${expandedItem.itemname} `;
 
-            if (expandedItem.wearname) {
+            if(expandedItem.phasename) {
+                name += `(${expandedItem.phasename})`;
+            } else if (expandedItem.wearname) {
                 name += `(${expandedItem.wearname})`;
             }
         }
