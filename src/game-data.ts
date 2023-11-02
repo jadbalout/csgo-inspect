@@ -12,7 +12,7 @@ export interface GameItemSticker {
 }
 //Adapted key naming convention from csgo's inspect response
 export type ExpandedCSGOItem = CSGOItem & {
-    stickers: GameItemSticker;
+    stickers: GameItemSticker[];
     imageurl: string;
     floatmin: number;
     floatmax: number;
@@ -35,6 +35,7 @@ export class GameData {
     csgoGameUIEnglish: Record<string, any>;
     schema: Record<string, any>;
     itemsGameCDN: Record<string, any>;
+    ready = false;
     constructor() {
         //Heavily inspired by csfloat
         this.items_game_url = 'https://raw.githubusercontent.com/Citrinate/CS2-ItemFileTracking/main/items_game.txt';
@@ -91,6 +92,7 @@ export class GameData {
             let data = fs.readFileSync('./game_files/schema.json', 'utf8');
             this.schema = JSON.parse(data)['result'];
         }
+        this.ready = true;
     }
     
 

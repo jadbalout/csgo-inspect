@@ -48,7 +48,7 @@ export class CSGOInspector {
     async getItemByInspectLink(inspectLink: string): Promise<ExpandedCSGOItem> {
         const { assetId } = decodeInspectLink(inspectLink);
         const item = await this.databaseAdapter.getItemByAssetId(assetId);
-        if(item) return item;
+        if(item) return this.gameData.addAdditionalItemProperties(item);
         //
         return new Promise((resolve, reject) => {
             this.queue.add(inspectLink, (err, job) => {
