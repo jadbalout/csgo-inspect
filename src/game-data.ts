@@ -130,7 +130,7 @@ export class GameData {
         // Get sticker codename/name
         const stickerKits = this.itemsGame.sticker_kits;
         for (const sticker of expandedItem.stickers || []) {
-            const kit = stickerKits[sticker.stickerId];
+            const kit = stickerKits[sticker.sticker_id];
 
             if (!kit) continue;
 
@@ -139,8 +139,8 @@ export class GameData {
 
             let name = this.csgoGameUIEnglish[kit.item_name.replace('#', '')];
 
-            if (sticker.tintId) {
-                name += ` (${this.csgoGameUIEnglish[`Attrib_SprayTintValue_${sticker.tintId}`]})`;
+            if (sticker.tint_id) {
+                name += ` (${this.csgoGameUIEnglish[`Attrib_SprayTintValue_${sticker.tint_id}`]})`;
             }
 
             if (name) sticker.name = name;
