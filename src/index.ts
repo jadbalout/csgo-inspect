@@ -54,6 +54,7 @@ export class CSGOInspector {
             this.queue.add(inspectLink, (err, job) => {
                 if(err) reject(err);
                 const item = job.data;
+                if(item == null) return resolve(null);
                 this.databaseAdapter.createOrUpdateItem(item);
                 const expandedItem = this.gameData.addAdditionalItemProperties(item);
                 resolve(expandedItem);
@@ -83,9 +84,10 @@ export class CSGOInspector {
                 for(let job of jobs) {
                     if(job.data == null) {
                         itemsByInspectLink[job.inspectLink] = null;
+                    } else {
+                        let expandedItem = this.gameData.addAdditionalItemProperties(job.data);
+                        itemsByInspectLink[job.inspectLink] = expandedItem;
                     }
-                    let expandedItem = this.gameData.addAdditionalItemProperties(job.data);
-                    itemsByInspectLink[job.inspectLink] = expandedItem;
                 }
                 resolve(itemsByInspectLink);
             });
