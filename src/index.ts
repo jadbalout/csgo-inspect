@@ -73,7 +73,7 @@ export class CSGOInspector {
         const itemsByInspectLink = {};
         for(let item of items) {
             let expandedItem = this.gameData.addAdditionalItemProperties(item);
-            itemsByInspectLink[inspectLinkByAssetIds[item.assetId]] = expandedItem;
+            itemsByInspectLink[inspectLinkByAssetIds[item.itemid]] = expandedItem;
         }
         if(items.length === inspectLinks.length) return itemsByInspectLink;
         const remainingInspectLinks = inspectLinks.filter(inspectLink => !itemsByInspectLink[inspectLink]);
