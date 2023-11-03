@@ -90,6 +90,7 @@ export class Bot extends EventEmitter {
     login() {
         console.log(`[${this.steamBotConfig.accountName}] Logging in`);
         this.steamClient.logOn({
+            logonID: Math.floor(Math.random() * 10_000),
             accountName: this.steamBotConfig.accountName,
             password: this.steamBotConfig.password,
             rememberPassword: true,
