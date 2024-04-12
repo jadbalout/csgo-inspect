@@ -38,11 +38,10 @@ export class GameData {
     ready = false;
     constructor() {
         //Heavily inspired by csfloat
-        this.items_game_url = 'https://raw.githubusercontent.com/Citrinate/CS2-ItemFileTracking/main/items_game.txt';
-        this.items_game_cdn_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/master/csgo/scripts/items/items_game_cdn.txt';
-        this.csgo_english_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CSGO/master/game/csgo/resource/csgo_english.txt';
+        this.items_game_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CS2/master/game/csgo/pak01_dir/scripts/items/items_game.txt';
+        this.items_game_cdn_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CS2/master/game/csgo/pak01_dir/scripts/items/items_game_cdn.txt';
+        this.csgo_english_url = 'https://raw.githubusercontent.com/SteamDatabase/GameTracking-CS2/master/game/csgo/pak01_dir/resource/csgo_english.txt';
         this.schema_url = 'https://raw.githubusercontent.com/SteamDatabase/SteamTracking/b5cba7a22ab899d6d423380cff21cec707b7c947/ItemSchema/CounterStrikeGlobalOffensive.json';
-        
         if (!fs.existsSync('./game_files')) {
             fs.mkdirSync('./game_files');
         } else {
