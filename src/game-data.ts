@@ -4,6 +4,8 @@ import * as vdf from 'simple-vdf';
 import getFloatKey from './util/getFloatKey';
 import { CSGOItem } from './bot';
 import getPhaseByPaintIndex from './util/getPhaseByPaintIndex';
+import getFadePercentage from './util/getFadePercentage';
+import getRarePatternName from './util/getRarePatternName';
 
 export interface GameItemSticker {
     codename: string;
@@ -22,6 +24,8 @@ export type ExpandedCSGOItem = CSGOItem & {
     qualityname: string;
     originname: string;
     wearname: string;
+    rarepattenname: string;
+    fadepercentage: string;
     fullitemname: string;
     phasename: string;
 }
@@ -227,6 +231,8 @@ export class GameData {
         });
 
         expandedItem.phasename = getPhaseByPaintIndex(expandedItem.paintindex);
+        expandedItem.fadepercentage = getFadePercentage(expandedItem.weapontype, expandedItem.itemname, expandedItem.paintseed);
+        expandedItem.rarepattenname = getRarePatternName(expandedItem.weapontype, expandedItem.itemname, expandedItem.paintseed);
         expandedItem.qualityname = this.csgoGameUIEnglish[qualityKey];
 
         // Get the origin name
@@ -259,15 +265,18 @@ export class GameData {
 
         name += `${expandedItem.weapontype} `;
 
-        if (expandedItem.weapontype === 'Sticker' || expandedItem.weapontype === 'Sealed Graffiti' || expandedItem.weapontype === 'Graffiti') {
+        if (expandedItem.weapontype === 'Sticker' || expandedItem.weapontype === 'Sealed Graffiti' || expandedItem.weapontype === 'Graffiti' || expandedItem.weapontype === 'Patch') {
             name += `| ${expandedItem.stickers[0].name}`;
         }
 
         // Vanilla items have an item_name of '-'
         if (expandedItem.itemname && expandedItem.itemname !== '-') {
             name += `| ${expandedItem.itemname} `;
-
-            if(expandedItem.phasename) {
+            if (expandedItem.rarepattenname) {
+                name += `(${expandedItem.rarepattenname})`;
+            } else if (expandedItem.fadepercentage) {
+                name += `(${expandedItem.fadepercentage})`;
+            } else if(expandedItem.phasename) {
                 name += `(${expandedItem.phasename})`;
             } else if (expandedItem.wearname) {
                 name += `(${expandedItem.wearname})`;
