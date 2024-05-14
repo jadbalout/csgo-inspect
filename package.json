@@ -1,6 +1,6 @@
 {
 	"name": "csgo-inspect",
-	"version": "1.3.3",
+	"version": "1.3.4",
 	"description": "Obtain information of any CSGO item using an inspect link.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

@@ -24,7 +24,7 @@ export type ExpandedCSGOItem = CSGOItem & {
     qualityname: string;
     originname: string;
     wearname: string;
-    rarepattenname: string;
+    rarepatternname: string;
     fadepercentage: string;
     fullitemname: string;
     phasename: string;
@@ -232,7 +232,7 @@ export class GameData {
 
         expandedItem.phasename = getPhaseByPaintIndex(expandedItem.paintindex);
         expandedItem.fadepercentage = getFadePercentage(expandedItem.weapontype, expandedItem.itemname, expandedItem.paintseed);
-        expandedItem.rarepattenname = getRarePatternName(expandedItem.weapontype, expandedItem.itemname, expandedItem.paintseed);
+        expandedItem.rarepatternname = getRarePatternName(expandedItem.weapontype, expandedItem.itemname, expandedItem.paintseed);
         expandedItem.qualityname = this.csgoGameUIEnglish[qualityKey];
 
         // Get the origin name
@@ -272,8 +272,8 @@ export class GameData {
         // Vanilla items have an item_name of '-'
         if (expandedItem.itemname && expandedItem.itemname !== '-') {
             name += `| ${expandedItem.itemname} `;
-            if (expandedItem.rarepattenname) {
-                name += `(${expandedItem.rarepattenname})`;
+            if (expandedItem.rarepatternname) {
+                name += `(${expandedItem.rarepatternname})`;
             } else if (expandedItem.fadepercentage) {
                 name += `(${expandedItem.fadepercentage})`;
             } else if(expandedItem.phasename) {
