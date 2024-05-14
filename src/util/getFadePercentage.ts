@@ -1,4 +1,4 @@
-const { FadeCalculator } = require('csgo-skin-fade-calculator');
+const { FadeCalculator } = require('csgo-fade-percentage-calculator');
 export default function getFadePercentage(weaponType, skinName, paintSeed) {
     if(skinName == "Fade") {
         //Fade
