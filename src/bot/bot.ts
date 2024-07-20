@@ -46,6 +46,7 @@ export interface CSGOItem {
 export class Bot extends EventEmitter {
     private steamBotConfig: SteamBotConfig;
     private requestConfig: BotRequestConfig;
+    private reloginInterval: NodeJS.Timeout;
     state = BotState.LoggedOut;
     steamClient: SteamUser;
     csgoClient: GlobalOffensive;
@@ -98,7 +99,10 @@ export class Bot extends EventEmitter {
         });
 
         //Setup random relogins every 30-40 minutes
-        setInterval(() => {
+        if(this.reloginInterval) {
+            clearInterval(this.reloginInterval);
+        }
+        this.reloginInterval = setInterval(() => {
             if (this.csgoClient.haveGCSession) {
                 this.steamClient.relog();
             }
@@ -106,6 +110,12 @@ export class Bot extends EventEmitter {
     }
     onLoginError(err) {
         console.log(`[${this.steamBotConfig.accountName}] Login error ${err}`);
+        if(err.message == "Proxy connection timed out") {
+            console.log(`[${this.steamBotConfig.accountName}] Retrying login in 10 seconds`);
+            setTimeout(() => {
+                this.login();
+            }, 10000);
+        }
     }
     onDisconnected(eresult, msg) {
         console.log(`[${this.steamBotConfig.accountName}] Logged off, reconnecting! (${eresult}, ${msg})`);
