@@ -47,6 +47,7 @@ export class Bot extends EventEmitter {
     private steamBotConfig: SteamBotConfig;
     private requestConfig: BotRequestConfig;
     private reloginInterval: NodeJS.Timeout;
+    private reloginAttempts: number = 0;
     state = BotState.LoggedOut;
     steamClient: SteamUser;
     csgoClient: GlobalOffensive;
@@ -110,11 +111,16 @@ export class Bot extends EventEmitter {
     }
     onLoginError(err) {
         console.log(`[${this.steamBotConfig.accountName}] Login error ${err}`);
-        if(err.message == "Proxy connection timed out") {
+        if(this.reloginAttempts > 20) {
+            console.log(`[${this.steamBotConfig.accountName}] Max relogin attempts reached, stopping bot`);
+            return;
+        }
+        if(err.message !== "InvalidPassword") { //Always retry login if error is not invalid password
             console.log(`[${this.steamBotConfig.accountName}] Retrying login in 10 seconds`);
+            this.reloginAttempts++;
             setTimeout(() => {
                 this.login();
-            }, 10000);
+            }, this.reloginAttempts * this.reloginAttempts * 10000);
         }
     }
     onDisconnected(eresult, msg) {
@@ -124,6 +130,7 @@ export class Bot extends EventEmitter {
     onLoggedIn() { //Can also be called on relogin.
         console.log(`[${this.steamBotConfig.accountName}] Logged in`);
         this.steamClient.gamesPlayed([], true);
+        this.reloginAttempts = 0;
         if (this.state !== BotState.LoggedOut) {
             //This is a relogin
             return this.steamClient.gamesPlayed([730], true);
